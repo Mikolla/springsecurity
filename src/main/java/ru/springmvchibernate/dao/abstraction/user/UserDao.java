@@ -13,10 +13,9 @@ public interface UserDao {
    User getUserById(long id);
 
     void editUser(User user);
- /*
 
 
-    User getUserByLogin(String login); */
+    User getUserByLogin(String login);
 
     void deleteUser(long id);
 

@@ -3,6 +3,7 @@ package ru.springmvchibernate.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
@@ -15,7 +16,6 @@ import java.util.List;
 @Controller
 public class HomeController {
 	@Autowired
-	@Qualifier("userServiceQualifier")
 	private UserService userService;
 
 	@RequestMapping("/test")
@@ -73,8 +73,15 @@ public class HomeController {
 
 
 	
-	@RequestMapping("/welcome")
+	@RequestMapping(value = { "/", "/welcome**" }, method = RequestMethod.GET)
 	public String getWelcome(){
 		return "welcome";
 	}
+
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String loginPage(ModelMap modelMap) {
+		return "login";
+	}
+
+
 }

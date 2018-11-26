@@ -8,9 +8,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by Skrezhet on 09.04.2017.
- */
+
 @Entity
 @Table(name = "Users")
 public class User implements UserDetails {

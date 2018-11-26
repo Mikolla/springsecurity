@@ -42,6 +42,10 @@ public class UserDaoImpl implements UserDao {
         User merged = em.merge(user);
      }
 
+    @Override
+    public User getUserByLogin(String login) {
+        return (User) em.createQuery("FROM User WHERE Login=:login").setParameter("login", login).getSingleResult();
+    }
 
 
     @Override

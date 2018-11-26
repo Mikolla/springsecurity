@@ -6,9 +6,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by Skrezhet on 09.04.2017.
- */
+
 @Entity
 @Table(name = "Roles")
 public class Role implements GrantedAuthority {

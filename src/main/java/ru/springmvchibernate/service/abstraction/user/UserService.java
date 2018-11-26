@@ -10,8 +10,8 @@ public interface UserService {
      User getUserById(long id);
 
     void editUser(User user);
-/*
- User getUserByLogin(String login); */
+
+ User getUserByLogin(String login);
 
      List<User> getAllUsers();
 
