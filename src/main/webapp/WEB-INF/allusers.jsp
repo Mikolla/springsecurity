@@ -21,8 +21,12 @@
             <label for="uPassword">Password:</label>
             <input type="text" id="uPassword" name="password" placeholder="Input password"/>
 
-            <label for="uRole">Role:</label>
-            <input type="text" id="uRole" name="role" placeholder="Input role"/>
+
+        <select class="form-control" name="role">
+            <option></option>
+            <option>User</option>
+            <option>Admin</option>
+        </select>
 
 
 
@@ -51,7 +55,7 @@
                 <td>${user.name}</td>
                 <td>${user.login}</td>
                 <td>${user.password}</td>
-                <td>${user.role}</td>
+                <td>"shmara"</td>
                 <td>
                     <a href="${pageContext.servletContext.contextPath}/admin/edituser/${user.id}">Edit</a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -77,7 +81,13 @@
                 </td>
 
                 <td>
-                    <input type="text" id="1uRole" name="role" placeholder="Input role"/>
+
+                    <select class="form-control" name="role">
+                        <option></option>
+                        <option>User</option>
+                        <option>Admin</option>
+                    </select>
+
                 </td>
 
                 <td>

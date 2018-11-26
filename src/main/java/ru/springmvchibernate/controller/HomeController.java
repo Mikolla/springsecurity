@@ -32,7 +32,7 @@ public class HomeController {
 		return "allusers";
 	}
 
-	@RequestMapping(value="/admin/adduser", method= RequestMethod.POST)
+/*	@RequestMapping(value="/admin/adduser", method= RequestMethod.POST)
 	//TODO  поправить adduser редирект на allusers
 	public String add(@RequestParam String name, @RequestParam String login, @RequestParam String password, @RequestParam String role, Model model)
 	{
@@ -41,7 +41,7 @@ public class HomeController {
 		List<User> users =  userService.getAllUsers();
 		model.addAttribute("users", users);
 		return "redirect:/admin/allusers";
-	}
+	}*/
 
 
 	@RequestMapping(value="/admin/deluser/{id}", method = RequestMethod.GET)
@@ -61,7 +61,7 @@ public class HomeController {
 		return "edituser";
 	}
 
-	@RequestMapping(value="/admin/edituser", method = RequestMethod.POST)
+/*	@RequestMapping(value="/admin/edituser", method = RequestMethod.POST)
 	public String saveUser(@RequestParam String id, @RequestParam String name, @RequestParam String login, @RequestParam String password, @RequestParam String role, Model model) {
 		long userIdToEdit = Long.parseLong(id);
 		User newUser = new User(userIdToEdit, name, login, password, role);
@@ -69,7 +69,7 @@ public class HomeController {
 		List<User> users = userService.getAllUsers();
 		model.addAttribute("users", users);
 		return "redirect:/admin/allusers";
-	}
+	} */
 
 
 	
