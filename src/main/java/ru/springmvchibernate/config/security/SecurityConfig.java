@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        CharacterEncodingFilter filter = new CharacterEncodingFilter();
+    /*    CharacterEncodingFilter filter = new CharacterEncodingFilter();
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
         http.authorizeRequests()
@@ -43,6 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().formLogin().loginPage("/login").successHandler(successHandler)
          //       .usernameParameter("username").passwordParameter("password")
          //       .and().exceptionHandling().accessDeniedPage("/access_denied")
-         ;
+         ; */
     }
 }

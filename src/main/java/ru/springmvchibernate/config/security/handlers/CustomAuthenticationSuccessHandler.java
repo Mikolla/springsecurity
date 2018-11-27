@@ -16,14 +16,12 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collection;
 
-/**
- * Created by SKYNET on 07.04.2017.
- */
+
 @Service
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-    //Вызывается когда пользователь удачно аутентифицировался
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         handle(httpServletRequest, httpServletResponse, authentication);
@@ -60,7 +58,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         if(session == null){
             return;
         }
-        //Отключает кеширование исключительных ситуаций
+
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
     }
 
