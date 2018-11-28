@@ -1,6 +1,8 @@
 package ru.springmvchibernate.dao.abstraction.role;
 
-import spring.security.project.model.Role;
+
+import ru.springmvchibernate.dao.GenericDao;
+import ru.springmvchibernate.model.Role;
 
 /**
  * Created by Skrezhet on 09.04.2017.

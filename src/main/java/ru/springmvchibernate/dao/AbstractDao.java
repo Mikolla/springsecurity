@@ -19,7 +19,7 @@ import java.util.List;
 @Transactional
 public abstract class AbstractDao<PK extends Serializable, T> {
     @PersistenceContext
-    EntityManager entityManager;
+    protected EntityManager entityManager;
 
     /**
      * Переменная, определяющая второй тип параметризованного абстарктного класса

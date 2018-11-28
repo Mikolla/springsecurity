@@ -1,6 +1,7 @@
 package ru.springmvchibernate.service.abstraction.role;
 
-import spring.security.project.model.Role;
+
+import ru.springmvchibernate.model.Role;
 
 import java.util.List;
 
