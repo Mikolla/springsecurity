@@ -13,6 +13,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
@@ -29,7 +30,7 @@ import static ru.springmvchibernate.util.PropertiesReader.getProperties;
 @EnableWebMvc
 @ComponentScan("ru.springmvchibernate")
 @EnableTransactionManagement
-public class WebConfig {
+public class WebConfig extends WebMvcConfigurerAdapter {
 	@Bean(name = "viewResolver")
 	public InternalResourceViewResolver getViewResolver() {
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();

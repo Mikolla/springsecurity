@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import ru.springmvchibernate.config.security.handlers.CustomAuthenticationSuccessHandler;
 import ru.springmvchibernate.config.security.service.AuthenticationService;
@@ -35,14 +36,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
+        http.csrf().disable().addFilterBefore(filter, CsrfFilter.class);
         http.authorizeRequests()
-              //  .antMatchers("/registration").permitAll()
-           //     .antMatchers("/user/**").hasAnyAuthority("User")
+                .antMatchers("/registration").permitAll()
+                .antMatchers("/user/**").hasAnyAuthority("User")
                 .antMatchers("/admin/**").hasAnyAuthority("Admin")
                 .antMatchers("/").hasAnyAuthority("Admin", "User")
                 .and().formLogin().loginPage("/login").successHandler(successHandler)
-         //       .usernameParameter("username").passwordParameter("password")
-         //       .and().exceptionHandling().accessDeniedPage("/access_denied")
+                .usernameParameter("username").passwordParameter("password")
+                .and().exceptionHandling().accessDeniedPage("/access_denied")
          ;
     }
 }

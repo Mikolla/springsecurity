@@ -5,9 +5,10 @@
 <head>
     <title>Login page</title>
 </head>
-<body style="background-color: lightyellow">
-    <div id="login-form">
-        <label id="login-label">LOGIN FORM</label>
+<body>
+<center>
+    <div>
+        <label>LOGIN FORM</label>
         <form method="POST" action="" name="loginForm">
             <c:if test="${param.logout != null}">
                 <div class="alert alert-success">
@@ -22,17 +23,18 @@
             <div>
                 <input class="form-control" type="text" name="username" placeholder="Login"/>
             </div>
-            <div id="div-margin-top">
+            <div>
                 <input class="form-control" type="password" name="password" placeholder="Password">
             </div>
-            <div id="button-margin">
+            <div>
                 <input class="btn btn-primary form-control" name="submit" type="submit" value="Login"/>
             </div>
-            <div id="link-position">
-                <a href="/registration" style="color: black">Registry</a>
+            <div>
+                <a href="/registration">Registration</a>
             </div>
             <input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
         </form>
     </div>
+</center>
 </body>
 </html>

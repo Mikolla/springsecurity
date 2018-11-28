@@ -2,6 +2,7 @@ package ru.springmvchibernate.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.springmvchibernate.model.Role;
 import ru.springmvchibernate.model.User;
 import ru.springmvchibernate.service.abstraction.user.UserService;
 import java.util.List;
@@ -83,5 +85,33 @@ public class HomeController {
 		return "login";
 	}
 
+
+	@RequestMapping(value = "/user", method = RequestMethod.GET)
+	public String userPage(ModelMap modelMap) {
+		modelMap.addAttribute("user", getPrincipal());
+		return "user";
+	}
+
+	@RequestMapping(value = "/admin", method = RequestMethod.GET)
+	public String adminPage(ModelMap modelMap) throws Exception {
+		modelMap.addAttribute("adminRole", new Role("Admin"));
+		modelMap.addAttribute("userRole", new Role("User"));
+		modelMap.addAttribute("adminName", getPrincipal());
+		modelMap.addAttribute("users", userService.getAllUsers());
+		return "admin";
+	}
+
+
+	private String getPrincipal() {
+		String userName = null;
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (principal instanceof User) {
+			userName = ((User) principal).getUsername();
+		} else {
+			userName = principal.toString();
+		}
+		return userName;
+	}
 
 }
