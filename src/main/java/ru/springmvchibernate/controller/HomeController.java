@@ -3,6 +3,7 @@ package ru.springmvchibernate.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,13 +13,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.springmvchibernate.model.Role;
 import ru.springmvchibernate.model.User;
+import ru.springmvchibernate.service.abstraction.role.RoleService;
 import ru.springmvchibernate.service.abstraction.user.UserService;
+
+import javax.persistence.NoResultException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class HomeController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private RoleService roleService;
 
 	@RequestMapping("/test")
 	public String getIndex(Model model){
@@ -99,6 +107,41 @@ public class HomeController {
 		modelMap.addAttribute("adminName", getPrincipal());
 		modelMap.addAttribute("users", userService.getAllUsers());
 		return "admin";
+	}
+
+
+	@RequestMapping(value = "/admin/add", method = RequestMethod.GET)
+	public String addUserPage(ModelMap modelMap) {
+		return "add";
+	}
+
+
+	@RequestMapping(value = "/admin/add", method = RequestMethod.POST)
+	public String addUserPage(@RequestParam(value = "name") String name,
+							  @RequestParam(value = "login") String login,
+							  @RequestParam(value = "password") String password,
+							  @RequestParam(value = "role") Set<Role> roles) throws UsernameNotFoundException {
+		if (roles.size() == 0) {
+			return "redirect:/admin/add?error";
+		} else if (password.equals("")) {
+			return "redirect:/admin/add?error";
+		} else if (login.equals("")) {
+			return "redirect:/admin/add?error";
+		} else if (name.equals("")) {
+			return "redirect:/admin/add?error";
+		}
+		Set<Role> roleSet = new HashSet<>();
+		for (Role role : roles) {
+			try {
+				roleSet.add(roleService.getByRoleName(role.getRoleName()));
+			} catch (NoResultException exp) {
+
+			}
+		}
+		User user = new User(name, login, password, roleSet);
+
+		userService.saveUser(user);
+		return "redirect:/admin";
 	}
 
 
