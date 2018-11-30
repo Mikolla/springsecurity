@@ -8,12 +8,18 @@
 <body>
 <c:set var="Admin1" value="${adminRole}"/>
 <c:set var="User1" value="${userRole}"/>
+<label>ADDING FORM</label>
+<c:if test="${param.error != null}">
+    <div>
+        <p>All fields must be filled.</p>
+    </div>
+</c:if>
 <center>
     <h1>User list</h1>
 
 
-    <form action="${pageContext.servletContext.contextPath}/admin/adduser" method="POST">
-
+   <!-- <form action="${pageContext.servletContext.contextPath}/admin/adduser" method="POST"> -->
+        <form method="post" action="">
             <label for="uName">Username:</label>
             <input type="text" id="uName" name="name" placeholder="Input name"/>
 

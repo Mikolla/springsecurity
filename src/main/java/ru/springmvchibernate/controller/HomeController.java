@@ -2,8 +2,10 @@ package ru.springmvchibernate.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,8 @@ import ru.springmvchibernate.service.abstraction.role.RoleService;
 import ru.springmvchibernate.service.abstraction.user.UserService;
 
 import javax.persistence.NoResultException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,6 +39,8 @@ public class HomeController {
 		return "index";
 	}
 
+
+
 	@RequestMapping(value="/admin/allusers", method = RequestMethod.GET)
 	public String allUsersGet(Model model){
 		List<User> users = userService.getAllUsers();
@@ -45,16 +51,34 @@ public class HomeController {
 		return "allusers";
 	}
 
-/*	@RequestMapping(value="/admin/adduser", method= RequestMethod.POST)
-	//TODO  поправить adduser редирект на allusers
-	public String add(@RequestParam String name, @RequestParam String login, @RequestParam String password, @RequestParam String role, Model model)
+	@RequestMapping(value= {"/admin/adduser"}, method= RequestMethod.POST)
+	public String add(@RequestParam(value = "name") String name,
+					  @RequestParam(value = "login") String login,
+					  @RequestParam(value = "password") String password,
+					  @RequestParam(value = "role") Set<Role> roles) throws UsernameNotFoundException
 	{
-		User newUser = new User(name, login, password, role);
-		userService.saveUser(newUser);
-		List<User> users =  userService.getAllUsers();
-		model.addAttribute("users", users);
+		if (roles.size() == 0) {
+			return "redirect:/admin/adduser?error";
+		} else if (password.equals("")) {
+			return "redirect:/admin/adduser?error";
+		} else if (login.equals("")) {
+			return "redirect:/admin/adduser?error";
+		} else if (name.equals("")) {
+			return "redirect:/admin/adduser?error";
+		}
+		Set<Role> roleSet = new HashSet<>();
+		for (Role role : roles) {
+			try {
+				roleSet.add(roleService.getByRoleName(role.getRoleName()));
+			} catch (NoResultException exp) {
+
+			}
+		}
+		User user = new User(name, login, password, roleSet);
+
+		userService.saveUser(user);
 		return "redirect:/admin/allusers";
-	}*/
+	}
 
 
 	@RequestMapping(value="/admin/deluser/{id}", method = RequestMethod.GET)
@@ -115,19 +139,6 @@ public class HomeController {
 	}
 
 
-
-/*	@RequestMapping(value="/admin/edituser", method = RequestMethod.POST)
-	public String saveUser(@RequestParam String id, @RequestParam String name, @RequestParam String login, @RequestParam String password, @RequestParam String role, Model model) {
-		long userIdToEdit = Long.parseLong(id);
-		User newUser = new User(userIdToEdit, name, login, password, role);
-		userService.editUser(newUser);
-		List<User> users = userService.getAllUsers();
-		model.addAttribute("users", users);
-		return "redirect:/admin/allusers";
-	} */
-
-
-	
 	@RequestMapping(value = { "/", "/welcome**" }, method = RequestMethod.GET)
 	public String getWelcome(){
 		return "welcome";
@@ -236,6 +247,21 @@ public class HomeController {
 
 		userService.editUser(user);
 		return "redirect:/admin/allusers";
+	}
+
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logOut(HttpServletRequest request, HttpServletResponse response) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth != null) {
+			new SecurityContextLogoutHandler().logout(request, response, auth);
+		}
+		return "redirect:/login?logout";
+	}
+
+
+	@RequestMapping(value = "/access_denied", method = RequestMethod.GET)
+	public String deniesPage(ModelMap modelMap) {
+		return "access_denied";
 	}
 
 }
