@@ -6,6 +6,8 @@
     <title>User list</title>
 </head>
 <body>
+<c:set var="Admin1" value="${adminRole}"/>
+<c:set var="User1" value="${userRole}"/>
 <center>
     <h1>User list</h1>
 
@@ -22,7 +24,8 @@
             <input type="text" id="uPassword" name="password" placeholder="Input password"/>
 
 
-        <select class="form-control" name="role">
+        <label for="uRole">Role:</label>
+        <select id="uRole" name="role">
             <option></option>
             <option>User</option>
             <option>Admin</option>
@@ -48,14 +51,24 @@
             <th>Role</th>
             <th>Actions</th>
         </tr>
-
+        <c:set var="shmara" value="Los'"/>
         <c:forEach items="${users}" var="user" varStatus="status">
+
+            <c:set var="roles" value="${user.roles}"/>
+            <c:choose>
+                <c:when test="${roles.contains(Admin1)}">
+                    <c:set var="shmara" value="Admin"/>
+                </c:when>
+                <c:otherwise>
+                    <c:set var="shmara" value="User"/>
+                </c:otherwise>
+            </c:choose>
             <tr>
                 <td>${user.id}</td>
                 <td>${user.name}</td>
                 <td>${user.login}</td>
                 <td>${user.password}</td>
-                <td>"shmara"</td>
+                <td>${shmara}</td>
                 <td>
                     <a href="${pageContext.servletContext.contextPath}/admin/edituser/${user.id}">Edit</a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -82,11 +95,11 @@
 
                 <td>
 
-                    <select class="form-control" name="role">
+                        <select  name="role">
                         <option></option>
                         <option>User</option>
                         <option>Admin</option>
-                    </select>
+                        </select>
 
                 </td>
 

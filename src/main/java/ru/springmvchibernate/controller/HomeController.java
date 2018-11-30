@@ -38,6 +38,9 @@ public class HomeController {
 	@RequestMapping(value="/admin/allusers", method = RequestMethod.GET)
 	public String allUsersGet(Model model){
 		List<User> users = userService.getAllUsers();
+		model.addAttribute("adminRole", new Role("Admin"));
+		model.addAttribute("userRole", new Role("User"));
+		model.addAttribute("adminName", getPrincipal());
 		model.addAttribute("users", users);
 		return "allusers";
 	}
@@ -70,6 +73,48 @@ public class HomeController {
 		model.addAttribute("user", userToEdit);
 		return "edituser";
 	}
+
+	@RequestMapping(value="/admin/edit/{id}", method = RequestMethod.GET)
+	public String editPage(@PathVariable("id") long id, Model model) {
+		long userIdToEdit = id;
+		User userToEdit =  userService.getUserById(userIdToEdit);
+		model.addAttribute("user", userToEdit);
+		return "edit";
+	}
+
+
+
+
+	@RequestMapping(value = { "/admin/edit" }, method = RequestMethod.POST)
+	public String updateUser(@RequestParam(value = "id") Long id,
+							 @RequestParam(value = "name") String name,
+							 @RequestParam(value = "login") String login,
+							 @RequestParam(value = "password") String password,
+							 @RequestParam(value = "role") Set<Role> roles) {
+		if (roles.size() == 0) {
+			return "redirect:/admin/edit/" + id.toString() + "?error";
+		} else if (password.equals("")) {
+			return "redirect:/admin/edit/" + id.toString() + "?error";
+		} else if (login.equals("")) {
+			return "redirect:/admin/edit/" + id.toString() + "?error";
+		} else if (name.equals("")) {
+			return "redirect:/admin/edit/" + id.toString() + "?error";
+		}
+		Set<Role> roleSet = new HashSet<>();
+		for (Role role : roles) {
+			try {
+				roleSet.add(roleService.getByRoleName(role.getRoleName()));
+			} catch (NoResultException exp) {
+
+			}
+		}
+		User user = new User(id, name, login, password, roleSet);
+
+		userService.editUser(user);
+		return "redirect:/admin";
+	}
+
+
 
 /*	@RequestMapping(value="/admin/edituser", method = RequestMethod.POST)
 	public String saveUser(@RequestParam String id, @RequestParam String name, @RequestParam String login, @RequestParam String password, @RequestParam String role, Model model) {
@@ -155,6 +200,42 @@ public class HomeController {
 			userName = principal.toString();
 		}
 		return userName;
+	}
+
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+	public String deleteUser(@PathVariable("id") Long id) {
+		userService.deleteUser(id);
+		return "redirect:/admin";
+	}
+
+
+	@RequestMapping(value = {  "/admin/edituser" }, method = RequestMethod.POST)
+	public String saveUser(@RequestParam(value = "id") Long id,
+						   @RequestParam(value = "name") String name,
+						   @RequestParam(value = "login") String login,
+						   @RequestParam(value = "password") String password,
+						   @RequestParam(value = "role") Set<Role> roles) {
+		if (roles.size() == 0) {
+			return "redirect:/admin/edit/" + id.toString() + "?error";
+		} else if (password.equals("")) {
+			return "redirect:/admin/edit/" + id.toString() + "?error";
+		} else if (login.equals("")) {
+			return "redirect:/admin/edit/" + id.toString() + "?error";
+		} else if (name.equals("")) {
+			return "redirect:/admin/edit/" + id.toString() + "?error";
+		}
+		Set<Role> roleSet = new HashSet<>();
+		for (Role role : roles) {
+			try {
+				roleSet.add(roleService.getByRoleName(role.getRoleName()));
+			} catch (NoResultException exp) {
+
+			}
+		}
+		User user = new User(id, name, login, password, roleSet);
+
+		userService.editUser(user);
+		return "redirect:/admin/allusers";
 	}
 
 }

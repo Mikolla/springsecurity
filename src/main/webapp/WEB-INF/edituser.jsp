@@ -21,10 +21,15 @@
             <label for="uPassword">Password:</label>
             <input type="text" id="uPassword" name="password" placeholder="Input password" value="${user.password}"/>
 
-            <label for="uRole">Password:</label>
-            <input type="text" id="uRole" name="role" placeholder="Input role" value="${user.role}"/>
-
+            <label for="uRole">Role:</label>
+                  <select id="uRole" name="role">
+                  <option></option>
+                  <option>User</option>
+                  <option>Admin</option>
+                  </select>
             <input type="submit" align="center" value="Submit"/>
+
+            <a class="btn btn-danger form-control" id="button-margin" href="/admin">Back</a>
 
 
     </form>
