@@ -5,6 +5,11 @@
     <title>User edit</title>
 </head>
 <body>
+<c:if test="${param.error != null}">
+    <div>
+        <p>All fields must be filled.</p>
+    </div>
+</c:if>
 <center>
     <h1>User edit</h1>
 

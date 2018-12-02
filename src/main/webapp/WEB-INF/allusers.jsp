@@ -6,6 +6,11 @@
     <title>User list</title>
 </head>
 <body>
+<c:if test="${param.error != null}">
+    <div>
+        <p>All fields must be filled while adding user.</p>
+    </div>
+</c:if>
 <c:set var="Admin1" value="${adminRole}"/>
 <c:set var="User1" value="${userRole}"/>
 <center>

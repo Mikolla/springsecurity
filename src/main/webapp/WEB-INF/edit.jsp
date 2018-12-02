@@ -9,7 +9,7 @@
     <div>
         <label >EDIT FORM</label>
         <c:if test="${param.error != null}">
-            <div class="alert alert-danger">
+            <div>
                 <p>All fields must be filled.</p>
             </div>
         </c:if>
