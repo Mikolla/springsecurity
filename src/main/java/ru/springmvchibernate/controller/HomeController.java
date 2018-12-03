@@ -52,7 +52,7 @@ public class HomeController {
 
 
 	@RequestMapping(value="/admin/adduser", method= RequestMethod.POST)
-	public String addUser     (@RequestParam(value = "name") String name,
+	public String saveUser     (@RequestParam(value = "name") String name,
 							  @RequestParam(value = "login") String login,
 							  @RequestParam(value = "password") String password,
 							  @RequestParam(value = "role") Set<Role> roles) throws UsernameNotFoundException {
@@ -267,5 +267,34 @@ public class HomeController {
 	public String registrationPage(ModelMap modelMap) {
 		return "registration";
 	}
+
+	@RequestMapping(value = "/registration", method = RequestMethod.POST)
+	public String addUser(@RequestParam(value = "name") String name,
+						  @RequestParam(value = "login") String login,
+						  @RequestParam(value = "password") String password,
+						  @RequestParam(value = "role") Set<Role> roles) throws UsernameNotFoundException {
+		if (roles.size() == 0) {
+			return "redirect:/registration?error";
+		} else if (password.equals("")) {
+			return "redirect:/registration?error";
+		} else if (login.equals("")) {
+			return "redirect:/registration?error";
+		} else if (name.equals("")) {
+			return "redirect:/registration?error";
+		}
+		Set<Role> roleSet = new HashSet<>();
+		for (Role role : roles) {
+			try {
+				roleSet.add(roleService.getByRoleName(role.getRoleName()));
+			} catch (NoResultException exp) {
+
+			}
+		}
+		User user = new User(name, login, password, roleSet);
+
+		userService.saveUser(user);
+		return "redirect:/";
+	}
+
 
 }
